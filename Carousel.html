@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Carousel</title>
+  <style class="style">
+    *{
+      margin: 0;
+      padding: 0;
+    }
+    ul{
+      list-style-type: none;
+    }
+    ul li {
+      /* position: absolute; */
+      display: inline-block;
+    }
+    ul li img{
+      width: 100%;
+    }
+    .wrap{
+      position: absolute;
+    }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <ul class="wrap">
+      <li><img src="./bd_logo1.png" alt="" srcset="">
+      </li><li><img src="./bd_logo1.png" alt="" srcset="">
+      </li><li><img src="./bd_logo1.png" alt="" srcset="">
+      </li><li><img src="./bd_logo1.png" alt="" srcset="">
+      </li><li><img src="./bd_logo1.png" alt="" srcset="">
+      </li><li><img src="./bd_logo1.png" alt="" srcset="">
+      </li>
+    </ul>
+  </div>
+  <script src="./cssTransform.js"></script>
+  <script>
+    // window.onload = function () {
+      var wrap = document.querySelector('.wrap');
+      var style = document.querySelector('.style');
+      var imgs = document.querySelectorAll('.wrap li');
+      var box = document.querySelector('.box');
+      var now = 1;
+      var left = 0;
+      var time1 = undefined;
+      var time2 = undefined;
+
+      // 特殊的设置样式的技巧
+      var styleText = '.wrap{width:' + imgs.length + '00%}.wrap li{width: ' + 
+            1 / imgs.length * 100 + '%}.box{height: ' + imgs[0].offsetHeight + 'px}';
+      style.innerHTML += styleText;
+
+      var now = 0;
+      var start = 0;
+
+      cssTransform(wrap, 'translateX', - imgs[0].clientWidth);
+
+      wrap.addEventListener('touchstart', function (e) {      
+        e.preventDefault();
+        wrap.style.transition = ''
+        clearTimeout(time1);
+        clearInterval(time2)
+        checkLi();
+        start = e.changedTouches[0].pageX;
+        left = cssTransform(wrap, 'translateX');
+      });
+      wrap.addEventListener('touchmove', function (e) {   
+        var move = start - e.changedTouches[0].pageX;
+        now = Math.round((move - left) / imgs[0].offsetWidth);
+        cssTransform(wrap, 'translateX' , left - move);
+      });
+      wrap.addEventListener('touchend', function (e) {   
+        setTimeout(function (params) {
+          wrap.style.transition = '.5s';
+          cssTransform(wrap, 'translateX' ,  - now * imgs[0].clientWidth);
+          checkLi2();
+          startInterval()
+        }, 30)
+      });
+
+
+      function checkLi(params) {
+        if (now <= 0) {
+          now = 4;
+          cssTransform(wrap, 'translateX', - now * imgs[0].clientWidth);
+        }
+        if (now >= 5) {
+          now = 1;
+          cssTransform(wrap, 'translateX', - now * imgs[0].clientWidth);
+        }
+      }
+      function checkLi2(params) {
+        time1 = setTimeout(() => {
+          if (now <= 0) {
+            wrap.style.transition = '';
+            now = 4;
+            cssTransform(wrap, 'translateX', - now * imgs[0].clientWidth);
+            setTimeout(() => {
+              wrap.style.transition = '.5s';
+            }, 30);
+          }
+          if (now >= 5) {
+            wrap.style.transition = '';
+            now = 1;
+            cssTransform(wrap, 'translateX', - now * imgs[0].clientWidth);
+            setTimeout(() => {
+              wrap.style.transition = '.5s';
+            }, 30);
+          }
+        }, 500);
+      }
+      function startInterval(params) {
+        time2 = setInterval(function () {
+          wrap.style.transition = '.5s';
+          now ++;
+          console.log(now);
+          cssTransform(wrap, 'translateX', - now * imgs[0].clientWidth);
+          checkLi2()
+        }, 1000)
+      }
+      startInterval()
+    // }
+  </script>
+</body>
+</html>
