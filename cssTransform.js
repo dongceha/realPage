@@ -28,18 +28,13 @@ function cssTransform(el, type, val) {
     var val = el.transform[type];
     if (val == undefined) {
       switch (type) {
-        case 'translateX':
-        case 'translateY':
-          val = 0
-          break;
         case 'scaleX':
         case 'scaleY':
+        case 'scale':
           val = 1
           break;
-        case 'rotate':
-          val = 0
-          break;
         default:
+          val = 0
           break;
       }
     }
