@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    *{
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    ul{
+      list-style-type: none;
+    }
+    a{
+      text-decoration: none;
+    }
+    #navScroll{
+      overflow: hidden;
+      background: green;
+    }
+    #navs{
+      white-space: nowrap;
+      float: left;
+    }
+    #navs li {
+      display: inline-block;
+      line-height: 21px;
+      text-align: center;
+      padding: 5px;
+    }
+    #navs li a{
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <div>
+    <nav id="navScroll">
+      <ul id="navs">
+        <li class="active">
+          <a href="javascript:void(0);" class="" data-tab="index">首页</a>
+        </li>
+        <li>
+          <a href="javascript:void(0);" data-tab="mv" class="">MV</a>
+        </li>
+        <li>
+          <a href="javascript:void(0);" data-tab="pl" class="">悦单</a>
+        </li>
+        <li>
+          <a href="javascript:void(0);" data-tab="vchart" class="">V榜</a>
+        </li>
+        <li>
+          <a href="javascript:void(0);" class="">众筹</a>
+        </li>
+        <li>
+          <a href="javascript:void(0);" data-tab="wapfan" class="">饭团</a>
+        </li>
+        <li>
+          <a href="javascript:void(0);" data-tab="program" class="">节目</a>
+        </li>
+        <li>
+          <a href="javascript:void(0);" data-tab="program" class="">节目</a>
+        </li>
+        <li>
+          <a href="javascript:void(0);" data-tab="stage" class="">音悦stage</a>
+        </li>
+        <li>
+          <a href="javascript:void(0);" data-tab="apps/mobile" class="">APP下载</a>
+        </li>
+        <li>
+          <a href="javascript:void(0);" target="_blank" class="">资讯</a>
+        </li>
+        <li>
+          <a href="javascript:void(0);" target="_blank" class="selected">我的家</a>
+        </li>
+        <li>
+          <a href="javascript:void(0);" data-tab="apps" class="">热门应用</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+  <script src="./cssTransform.js"></script>
+  <script>
+    var navs = document.querySelector('#navs');
+    function setNavScroll() {
+      var startX;
+      var startTouch;
+      var lastDis;
+      var startT;
+      var maxLeft = navs.offsetWidth - screen.availWidth;
+      navs.addEventListener('touchstart', function (e) {
+        navs.style.transition = "none";
+        startTouch = e.changedTouches[0].pageX;
+        startT = Date.now();
+        startX = cssTransform(navs, 'translateX')
+      });
+      navs.addEventListener('touchmove', function (e) {
+        var touchX = e.changedTouches[0].pageX;
+        var move = - (startTouch - touchX);
+        var left = move + startX
+        if (left > 0) {
+          var step = 1 - left / screen.availWidth;
+          left = parseInt(step * left);
+        }
+        if (left < - maxLeft) {
+          var overLen = -(left + maxLeft)
+          var step = 1 - overLen / screen.availWidth;
+          left = -(maxLeft + parseInt(step * overLen));
+        }
+        cssTransform(navs, 'translateX', left)
+      });
+      navs.addEventListener('touchend', function (e) {
+        var endX = e.changedTouches[0].pageX;
+        var rangeT = Date.now() - startT;
+        var slideTo = (endX - startTouch) / rangeT * 300;
+        var type = "cubic-bezier(.34,.92,.58,.9)";
+        var left = cssTransform(navs, 'translateX') + slideTo;
+        var time = Math.abs(slideTo * .9);
+        time = time < 300 ? 300 : time;
+        if (left > 0) {
+          left = 0
+          type = "cubic-bezier(.08,1.44,.6,1.46)";
+        }
+        if (left < -maxLeft) {
+          left = -maxLeft;
+          type = "cubic-bezier(.08,1.44,.6,1.46)";
+        }
+        navs.style.transition = time + 'ms ' + type;
+        cssTransform(navs, 'translateX', left)
+      })
+    }
+    setNavScroll()
+
+    // 网易： 屏幕宽度为 6.4rem，因为他们的设计稿为 640px，所以 1rem =
+    // document.documentElement.style.fontSize = document.documentElement.clientWidth / 6.4 + 'px';
+    // document.documentElement.style.fontSize = document.documentElement.clientWidth / 10 + 'px';
+  </script>
+</body>
+</html>
