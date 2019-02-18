@@ -10,20 +10,27 @@ function cssTransform(el, type, val) {
       switch (key) {
         case 'translateX':
         case 'translateY':
+        case "translateZ":
           css += key + '(' + el.transform[key] + 'px)'
           break;
         case 'scaleX':
         case 'scaleY':
+        case "scale":
           css += key + '(' + el.transform[key] + ')'
           break;
-        case 'rotate':
+        case "rotate":
+        case "rotateX":
+        case "rotateY":
+        case "rotateZ":
+        case "skewX":
+        case "skewY":
           css += key + '(' + el.transform[key] + 'deg)'
           break;
         default:
           break;
       }
     }
-    el.style.transform = css;
+    el.style.WebkitTransform = el.style.transform = css;
   } else {
     var val = el.transform[type];
     if (val == undefined) {

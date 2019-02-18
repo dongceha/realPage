@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>3d桌面切换</title>
+  <style id="style">
+    *{
+      margin: 0;
+      padding: 0;
+    }
+    html, body{
+      width: 100%;
+      height: 100%;
+    }
+    ul li{
+      font-size: 0;
+      list-style-type: none;
+    }
+    section{
+      height: 100%;
+    }
+    .wrap header{
+			height: 4.0625%;
+			background: url(./image/phone_img1.png) no-repeat;
+    }
+    .content {
+			height: 76.3542%;
+			background: #fff;
+		}
+    .content li{
+      width: 25%;
+      height: 100%;
+      float: left;
+      position: relative;    
+      -webkit-transform-style: preserve-3d;
+			transform-style: preserve-3d;
+    }
+    .content div:nth-of-type(1) span{
+      background: url(./image/phone_img1.png)
+    }
+    .content div:nth-of-type(2) span{
+      background: url(./image/phone_img2.png)
+    }
+    .content div:nth-of-type(3) span{
+      background: url(./image/phone_img3.png)
+    }
+    .content div{
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+    .content span{
+      width: 100%;
+      height: 25%;
+      display: inline-block;
+    }
+    #footer {
+			height: 19.5833%;
+			background: url(./image/phone_img1.png) no-repeat 0 bottom ;
+		}
+  </style>
+</head>
+<body>
+  <section class="wrap">
+    <header id="header" class="bg"></header>
+    <ul class="content">
+      <li>
+        <div>
+          <span class="bg"></span>
+          <span class="bg"></span>
+          <span class="bg"></span>
+          <span class="bg"></span>
+        </div>
+        <div>
+          <span class="bg"></span>
+          <span class="bg"></span>
+          <span class="bg"></span>
+          <span class="bg"></span>
+        </div>
+        <div>
+          <span class="bg"></span>
+          <span class="bg"></span>
+          <span class="bg"></span>
+          <span class="bg"></span>
+        </div>
+      </li>
+      <li>
+        <div>
+          <span class="bg"></span>
+          <span class="bg"></span>
+          <span class="bg"></span>
+          <span class="bg"></span>
+        </div>
+        <div>
+          <span class="bg"></span>
+          <span class="bg"></span>
+          <span class="bg"></span>
+          <span class="bg"></span>
+        </div>
+        <div>
+          <span class="bg"></span>
+          <span class="bg"></span>
+          <span class="bg"></span>
+          <span class="bg"></span>
+        </div>
+      </li>
+      <li>
+        <div>
+          <span class="bg"></span>
+          <span class="bg"></span>
+          <span class="bg"></span>
+          <span class="bg"></span>
+        </div>
+        <div>
+          <span class="bg"></span>
+          <span class="bg"></span>
+          <span class="bg"></span>
+          <span class="bg"></span>
+        </div>
+        <div>
+          <span class="bg"></span>
+          <span class="bg"></span>
+          <span class="bg"></span>
+          <span class="bg"></span>
+        </div>
+      </li>
+      <li>
+        <div>
+          <span class="bg"></span>
+          <span class="bg"></span>
+          <span class="bg"></span>
+          <span class="bg"></span>
+        </div>
+        <div>
+          <span class="bg"></span>
+          <span class="bg"></span>
+          <span class="bg"></span>
+          <span class="bg"></span>
+        </div>
+        <div>
+          <span class="bg"></span>
+          <span class="bg"></span>
+          <span class="bg"></span>
+          <span class="bg"></span>
+        </div>
+      </li>
+    </ul>
+    <footer id="footer" class="bg"></footer>
+  </section>
+  <script src="./js/cssTransform.js"></script>
+  <script>
+    toCss()
+    function toCss() {
+      var htmlRect = document.querySelector('html').getBoundingClientRect();
+      var style = document.querySelector('#style');
+      var z = (Math.tan(30 * Math.PI / 180) * (htmlRect.width / 8)).toFixed(4);
+      var styleTXT = '.bg{background-size: ' + htmlRect.width + 'px '
+        + htmlRect.height + 'px !important}';
+      styleTXT += '.content li{-webkit-transform: translateZ(-'+ z +'px);transform: translateZ(-' + z +'px);}'
+      for (var i = 0; i < 3; i ++) {
+        styleTXT += '.content div:nth-of-type('+ (i + 1) +'){-webkit-transform:rotateY('+(i*120)+'deg) translateZ(' + z + 'px);transform:rotateY(' + (i * 120) +'deg) translateZ(' + z +'px);}'
+      };
+      style.innerHTML += styleTXT
+    }
+                    
+    window.onload = function () {
+      var htmlRect = document.querySelector('html').getBoundingClientRect();
+      var li = document.querySelectorAll(".content li");
+      var spanArr = document.querySelectorAll('.content span');
+      var z = (Math.tan(30 * Math.PI / 180) * (htmlRect.width / 8)).toFixed(4);
+      // for (var i = 0; i < spanArr.length; i++) {
+      //   spanArr[i].style.backgroundPosition = - spanArr[i].getBoundingClientRect().left + 'px -'
+      //     + spanArr[i].getBoundingClientRect().top + 'px';
+      // }
+      // 这里使用 li 的 left 是因为，当 transform 之后，span 本身的 left 也会发生改变 
+      for (var i = 0; i < li.length; i++) {
+        var left = li[i].getBoundingClientRect().left;
+        var span = li[i].getElementsByTagName('span');
+        for (var j = 0; j < span.length; j++) {
+          var top = span[j].getBoundingClientRect().top;
+          span[j].style.backgroundPosition = "-" + left + "px -" + top + "px";
+        }
+      }
+      for (var i = 0; i < li.length; i++) {
+        cssTransform(li[i], "translateZ", -z);
+        cssTransform(li[i], "rotateY", 0);
+      }
+      var content = document.querySelector(".content");
+      var startDeg = 0;
+      var startPoint = 0;
+      content.addEventListener('touchstart', function (e) {
+        for (var i = 0; i < li.length; i++) {
+          li[i].style.transition = "none";
+        }
+        startPoint = e.changedTouches[0].pageX;
+        startDeg = cssTransform(li[0], "rotateY");
+      });
+      content.addEventListener('touchmove', function (e) {
+        var dis = e.changedTouches[0].pageX - startPoint ;
+        var rotate =  dis / htmlRect.width * 120;
+        for (var i = 0; i < li.length; i++) {
+          cssTransform(li[i], "rotateY", rotate + startDeg);
+        }
+      });
+      content.addEventListener('touchend', function (e) {
+        var nowDeg = cssTransform(li[0], "rotateY");
+        var now = (-Math.round(nowDeg / 120));
+        for (var i = 0; i < li.length; i++) {
+          li[i].style.transition = ".5s";
+          cssTransform(li[i], "rotateY", -now * 120);
+        }
+      })
+      toCss()
+    }
+  </script>
+</body>
+</html>
